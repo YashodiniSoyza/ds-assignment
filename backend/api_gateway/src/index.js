@@ -13,6 +13,7 @@ export const apiGateway = express();
 apiGateway.use(cors());
 // apiGateway.use(express.json())
 
+//cretaing proxies below
 const userProxy = createProxyMiddleware({
   target: process.env.USER_API,
   changeOrigin: true,
