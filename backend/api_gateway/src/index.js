@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import express from "express";
 import { createProxyMiddleware } from "http-proxy-middleware";
 
+//loads .env file
 dotenv.config();
 
 // eslint-disable-next-line no-console
