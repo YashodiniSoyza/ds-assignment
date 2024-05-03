@@ -47,6 +47,7 @@ apiGateway.use((req, _res, next) => {
   next();
 });
 
+//defining routes for other microservices
 apiGateway.use("/api/users", userProxy);
 apiGateway.use("/api/courses", courseProxy);
 apiGateway.use("/api/payment", paymentProxy);
