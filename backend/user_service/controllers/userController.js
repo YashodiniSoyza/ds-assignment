@@ -29,7 +29,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
         error: error.details[0].message,
       });
     }
-
+    //Check user with email
     connection.query(
       "SELECT * FROM users WHERE email = ?",
       [[req.body.email]],
@@ -58,11 +58,11 @@ const loginUser = asyncHandler(async (req, res, next) => {
             message: "wrong password",
           });
         }
-
+        //JWT token
         const token = JWT.sign(
           { id: data[0].id, fullName: data[0].fullName, role: data[0].role },
           constants.SECRET_KEY,
-          { expiresIn: "10d" }
+          { expiresIn: "10d" } //Set expiration date for 10d
         );
 
         res.json({
@@ -82,7 +82,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
     });
   }
 });
-
+//Register user
 const registerUser = asyncHandler(async (req, res, next) => {
   //check request body is empty
   if (isEmpty(req.body)) {
