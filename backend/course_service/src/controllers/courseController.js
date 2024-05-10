@@ -28,7 +28,7 @@ const getCourses = asyncHandler(async (req, res) => {
   });
 });
 
-// FOR INSTRUCTOR
+// GET COURSES FOR INSTRUCTOR
 const getCoursesByInstructor = async (req, res) => {
   const id = req.user;
 
@@ -51,7 +51,7 @@ const getCoursesByInstructor = async (req, res) => {
   );
 };
 
-// FOR STUDENT
+// GET ALL COURSES FOR STUDENT
 const getAllAcceptedCourses = async (req, res) => {
 
   connection.query(
@@ -72,7 +72,7 @@ const getAllAcceptedCourses = async (req, res) => {
     }
   );
 };
-// Create New courses
+// Create New course
 const createCourse = asyncHandler(async (req, res, next) => {
   const { title, description, course_status, course_type, enrollment_fee } =
     req.body;
