@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  user-service:
+    build: .
+    ports:
+      - "5005:5005"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_HOST=host.docker.internal 
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=
+      - DATABASE_NAME=user_database
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: user_database
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
