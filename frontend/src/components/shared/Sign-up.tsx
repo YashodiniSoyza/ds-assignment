@@ -50,7 +50,7 @@ const Register = () => {
 
   const handleRegister = async (values: any) => {
     const { data } = await axios.post(
-      "http://localhost:5005/api/users/register",
+      "http://localhost:5000/api/users/register",
       { ...values, userType: undefined, role: values.userType }
     );
 

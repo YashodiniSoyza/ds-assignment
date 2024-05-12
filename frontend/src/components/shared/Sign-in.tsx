@@ -30,7 +30,7 @@ const Login = () => {
 
   const handleLogin = async (formData: { email: string; password: string }) => {
     const { data } = await axios.post(
-      "http://localhost:5005/api/users/login",
+      "http://localhost:5000/api/users/login",
       formData
     );
 
@@ -48,8 +48,10 @@ const Login = () => {
 
       if (data.role === "student") {
         navigate("/student/browse");
-      } else {
+      } else if (data.role === "instructor") {
         navigate("/instructor/courses");
+      } else {
+        navigate("/admin/view-courses");
       }
     } else {
       toast.error(data.message);
