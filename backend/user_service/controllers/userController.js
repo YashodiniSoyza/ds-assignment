@@ -9,6 +9,36 @@ import { constants } from "../utils/constant.js";
 import bcrypt from "bcryptjs";
 import JWT from "jsonwebtoken";
 import axios from "axios";
+// import Kafka from "node-rdkafka";
+
+// const kafkaConfig = {
+//   "metadata.broker.list": process.env.KAFKA_BOOTSTRAP_SERVERS,
+//   "security.protocol": process.env.KAFKA_SECURITY_PROTOCOL,
+//   "sasl.mechanisms": process.env.KAFKA_SASL_MECHANISMS,
+//   "sasl.username": process.env.KAFKA_SASL_USERNAME,
+//   "sasl.password": process.env.KAFKA_SASL_PASSWORD,
+//   "session.timeout.ms": process.env.KAFKA_SESSION_TIMEOUT_MS,
+//   dr_cb: true,
+// };
+
+// const producer = new Kafka.Producer(kafkaConfig);
+// producer.connect();
+// producer.on("ready", () => {
+//   logger.info("Producer connected to Kafka");
+// });
+// producer.on("event.error", (error) => {
+//   logger.error(`Error connecting to Kafka: ${error}`);
+// });
+
+// const sendUserRegisteredEvent = (user) => {
+//   producer.produce(
+//     "USER_REGISTERED",
+//     -1,
+//     Buffer.from(JSON.stringify(user)),
+//     Buffer.from("UserRegisteredKey"),
+//     Date.now()
+//   );
+// };
 
 const loginUser = asyncHandler(async (req, res, next) => {
   //check request body is empty
@@ -29,7 +59,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
         error: error.details[0].message,
       });
     }
-    //Check user with email
+
     connection.query(
       "SELECT * FROM users WHERE email = ?",
       [[req.body.email]],
@@ -58,11 +88,11 @@ const loginUser = asyncHandler(async (req, res, next) => {
             message: "wrong password",
           });
         }
-        //JWT token
+
         const token = JWT.sign(
           { id: data[0].id, fullName: data[0].fullName, role: data[0].role },
           constants.SECRET_KEY,
-          { expiresIn: "10d" } //Set expiration date for 10d
+          { expiresIn: "10d" }
         );
 
         res.json({
@@ -82,7 +112,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
     });
   }
 });
-//Register user
+
 const registerUser = asyncHandler(async (req, res, next) => {
   //check request body is empty
   if (isEmpty(req.body)) {
@@ -152,12 +182,23 @@ const registerUser = asyncHandler(async (req, res, next) => {
               });
             }
 
+            // kafka dataset
+            // const data = {
+            //   _id: data[0].id,
+            //   name: data[0].fullName,
+            //   email: data[0].email,
+            //   role: data[0].role,
+            // };
+
+            // publish event
+            // sendUserRegisteredEvent(data);
+            
             //call microservice: email service -> send customize email
-            await axios.post("http://localhost:5001/api/send/mail", {
-              email: req.body.email,
-              subject: "User Registration",
-              content: `This user email ${req.body.email} is successfully registered to the system`,
-            });
+            // await axios.post("http://localhost:5001/api/send/mail", {
+            //   email: req.body.email,
+            //   subject: "User Registration",
+            //   content: `This user email ${req.body.email} is successfully registered to the system`,
+            // });
 
             res.json({
               status: true,
